@@ -1,0 +1,15 @@
+version: "3"
+services:
+  app:
+    container_name: <you_rails_appname>
+    build:
+      context: ./docker-services/app
+      dockerfile: Dockerfile
+    environment:
+      - "YOUR_ENVIRONMENT_VAR=true"
+    volumes:
+      - ./<you_rails_appname>:/myapp/
+    ports: # host-port:container-port
+    # overwrite default command
+    command: sh -c 'cd /myappp ; bundle install; rm  /myapp/tmp/pids/server.pid; rails server -b 0.0.0.0'
+#    restart: always
