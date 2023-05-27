@@ -1,0 +1,9 @@
+docker build . -t rails_template_maker
+docker run --name rails_template_maker_container rails_template_maker
+# 時間かかる
+docker run exec rails_template_maker rails new new_app
+
+docker stop rails_template_maker_container
+docker rm  rails_template_maker_container
+docker rmi rails_template_maker
+

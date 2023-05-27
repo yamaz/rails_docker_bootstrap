@@ -1,0 +1,51 @@
+#!bash
+
+#railsファイルのひな形をrails環境を作ることなく作るscript
+
+# 引数の数が1でない場合、エラーメッセージを表示して終了
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <appname>"
+    exit 1
+fi
+# 必須の引数を変数にセット
+APPNAME=$1
+#DRY_RUN=1
+
+# 変数が小文字だけで構成されているか確認
+if [[ $APPNAME =~ [A-Z] ]]; then
+    echo "appname must be lowercase"
+    exit 1
+fi
+
+
+# contaner名などは小文字である必要がある
+ERANDOM=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 10 ; echo ''`
+ERANDOM=${ERANDOM,,}
+
+# コマンドを実行するための関数
+run() {
+  if [[ $DRY_RUN -eq 1 ]]; then
+    echo "DRY-RUN: $@"
+  else
+    echo "$@"
+    "$@"
+  fi
+}
+
+# RTM(rails_template_maker)
+CONTAINER_IMAGE_NAME=rtm_${APPNAME}_${ERANDOM}
+CONTAINER_NAME=rtm_${APPNAME}_${ERANDOM}_container
+
+
+run docker build ./docker-services/bootstrap -t $CONTAINER_IMAGE_NAME
+run docker run -d --name $CONTAINER_NAME  $CONTAINER_IMAGE_NAME
+
+run docker exec $CONTAINER_NAME rails new $APPNAME
+run docker exec $CONTAINER_NAME /bin/bash -c "cd /myapp/$ARG1; bundle install"
+
+run docker cp   $CONTAINER_NAME:/myapp/$APPNAME ./
+run docker stop $CONTAINER_NAME
+run docker rm  $CONTAINER_NAME
+run docker rmi $CONTAINER_IMAGE_NAME
+
+
