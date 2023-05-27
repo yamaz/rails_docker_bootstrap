@@ -1,7 +1,8 @@
-railsの一連のファイルをrailsコマンドなしで作ってコンテナ化する
+bootstrap with ruby/rails on docker without ruby and rails installation.
 
+Motivation: I don't want to install ruby/Rails environment on the host.
 
-# requirements
+# requiremts
 - docker
 - bash(4+)
 
