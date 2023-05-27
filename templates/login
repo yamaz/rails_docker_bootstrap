@@ -1,0 +1,1 @@
+docker exec -it  RTM_CONTAINER_NAME_REPLACE  /bin/bash

@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+if [ -z "$1" ]; then
+    echo "no script filename"
+    exit
+else
+  docker exec  RTM_CONTAINER_NAME_REPLACE  $1
+fi
+

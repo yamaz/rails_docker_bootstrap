@@ -1,7 +1,8 @@
-#!bash
+#!bash 
+
+#DRY_RUN=1
 
 #railsファイルのひな形をrails環境を作ることなく作るscript
-
 # 引数の数が1でない場合、エラーメッセージを表示して終了
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <appname>"
@@ -9,7 +10,6 @@ if [ $# -ne 1 ]; then
 fi
 # 必須の引数を変数にセット
 APPNAME=$1
-#DRY_RUN=1
 
 # 変数が小文字だけで構成されているか確認
 if [[ $APPNAME =~ [A-Z] ]]; then
@@ -39,13 +39,18 @@ CONTAINER_NAME=rtm_${APPNAME}_${ERANDOM}_container
 
 run docker build ./docker-services/bootstrap -t $CONTAINER_IMAGE_NAME
 run docker run -d --name $CONTAINER_NAME  $CONTAINER_IMAGE_NAME
-
 run docker exec $CONTAINER_NAME rails new $APPNAME
 run docker exec $CONTAINER_NAME /bin/bash -c "cd /myapp/$ARG1; bundle install"
-
 run docker cp   $CONTAINER_NAME:/myapp/$APPNAME ./
 run docker stop $CONTAINER_NAME
 run docker rm  $CONTAINER_NAME
 run docker rmi $CONTAINER_IMAGE_NAME
 
+SED_CMD="s/RTM_CONTAINER_NAME_REPLACE/${APPNAME}_app/g"
+sed  $SED_CMD templates/login      > ./scripts/login
+sed  $SED_CMD templates/runner      > ./scripts/runner
+sed  $SED_CMD  templates/compose.yml > ./compose.yml
 
+
+SED_CMD="s/RTM_APP_DIR_REPLACE/${APPNAME}/g"
+sed -i  $SED_CMD  ./compose.yml

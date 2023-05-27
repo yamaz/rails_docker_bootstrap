@@ -1,14 +1,14 @@
 version: "3"
 services:
   app:
-    container_name: scalecdm_app
+    container_name: RTM_CONTAINER_NAME_REPLACE
     build:
       context: ./docker-services/app
       dockerfile: Dockerfile
     environment:
       - "YOUR_ENVIRONMENT_VAR=true"
     volumes:
-      - ./scalecdm:/myapp/
+      - ./RTM_APP_DIR_REPLACE:/myapp/
 #    ports: # host-port:container-port
 #      - 3000:3000
     # overwrite default command

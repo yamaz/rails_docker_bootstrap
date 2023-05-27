@@ -1,12 +1,23 @@
-railsの一連のファイルをrailsコマンドなしで作る
+railsの一連のファイルをrailsコマンドなしで作ってコンテナ化する
 
 
-#
+# requirements
 - docker
 - bash(4+)
 
+# Usage
 
-# Usage:
+## setup
 ```
-./scripts/setup <appname(should be lowercase)>
+./bin/setup <appname(should be lowercase)>
+```
+
+## container up
+```
+./bin/up
+```
+
+## container down
+```
+./bin/down
 ```
